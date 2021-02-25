@@ -9,9 +9,10 @@ const FilmReq = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [films, setFilms] = useState([]);
 
+
     return (
         <>
-            <FilmSearchBar setFilms={setFilms} setError={setError} />
+            <FilmSearchBar setFilms={setFilms} setError={setError} setIsLoaded={setIsLoaded} />
             <ShowFilms films={films} />
         </>
     );

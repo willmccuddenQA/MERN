@@ -1,31 +1,34 @@
 'use strict'
 
-import { useState } from 'react'
+import { useState, useEffect} from 'react';
+import axios from 'axios';
 
-const FilmSearchBar = ({setFilms, setError}) => {
+const FilmSearchBar = ({setFilms, setError, setIsLoaded}) => {
 
     const [searchText, setSearchText] = useState("");
 
-    const retrieveFilms = (text) =>{
-            axios
-                .get("http://www.omdbapi.com/?apikey=1f69c227&t=" + text)
-                .then((res) => res)
-                .then((result) => {
-                    setFilms(result.data.data);
-    
-                },
-                    (error) => {
-                        setError(error);
-                    }
-                );
+    const newSearchInput = ({target}) => {
+        setSearchText(target.value);
     }
+
+    const submitForm = (event) =>{
+        event.preventDefault();
+    }
+
+    const makeRequest =(e) => {
+        axios.get("http://www.omdbapi.com/?i=tt3896198&apikey=1f69c227&s=" + searchText)
+        .then(response => {
+            console.log(response.data.Search);
+            setFilms = response.data.Search;
+        });
+    };
 
     return (
         <>
-            <form onSubmit = {retrieveFilms(searchText)}>
+            <form onSubmit = {submitForm}>
                 <label>Film:</label>
-                <input type="text" value={searchText} onChange={e=>setSearchText(e.target.value)} ></input>
-                <button> Search</button>
+                <input type="text" onChange={(e) => newSearchInput(e)}></input>
+                <button onClick={(e) => makeRequest(e)}>Enter</button>
             </form>
         </>
     );
